@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<script>
+  let timeout;
+
+function debouncedCalculateSum() {
+  clearTimeout(timeout);
+  timeout = setTimeout(() => {
+    calculateSum();
+  }, 100);
+}
+
+  function calculateSum() {
+    const firstNumber = document.getElementById("First").value; // Corrected variable name
+    const secondNumber = document.getElementById("secound").value; // Corrected variable name
+    const sum = document.getElementById("sum");
+    fetch(`http://localhost:3000/sum?a=${firstNumber}&b=${secondNumber}`)
+      .then((response) => response.text()) // Get the text response from the server
+      .then((data) => {
+        sum.innerHTML = data;
+        console.log(data); // Log the response data for debugging
+      })
+      .catch((error) => {
+        console.log("Error fetching data:", error); // Handle errors
+      });
+  }
+</script>
+<body>
+  <input type="number" placeholder="First number" id="First" oninput="debouncedCalculateSum()"></input><br><br>
+  <input type="number" placeholder="Second number" id="secound" oninput="debouncedCalculateSum()" ></input><br><br>
+  <button onclick="calculateSum()">Calculate Sum</button><br><br>
+  <div id="sum"></div>
+</body>
+</html>
